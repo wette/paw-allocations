@@ -1,0 +1,97 @@
+\documentclass[11pt]{beamer}
+\usetheme{Warsaw}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\author{Philip Wette}
+\title{ILP zur PAW-Zuordnung}
+%\setbeamercovered{transparent} 
+%\setbeamertemplate{navigation symbols}{} 
+%\logo{} 
+%\institute{} 
+%\date{} 
+%\subject{} 
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%\begin{frame}
+%\tableofcontents
+%\end{frame}
+
+\begin{frame}{Input-Variablen I}
+Beschreibung der Projekte:
+\begin{description}
+\item[$P$] $\in \mathcal{N}$ Anzahl der Projekte \\
+\item[$c_p$] $\in \mathcal{N} ~ \forall p \in \left[1, P\right]$ Anzahl der Plätze von Projekt $p$ \\
+\item[$req^{elm}_p$] $\in \mathcal{N} ~ \forall p \in \left[1, P\right]$ Erforderliche Anzahl von ELM Studenten in Projekt $p$ \\
+\item[$req^{mbm}_p$] $\in \mathcal{N} ~ \forall p \in \left[1, P\right]$ Erforderliche Anzahl von MBM Studenten in Projekt $p$ \\
+\item[$req^{wim}_p$] $\in \mathcal{N} ~ \forall p \in \left[1, P\right]$ Erforderliche Anzahl von WIM Studenten in Projekt $p$ \\
+\end{description}
+\end{frame}
+
+\begin{frame}{Input-Variablen II}
+Beschreibung der Studierenden:
+\begin{description}
+\item[$S$] Anzahl der Studenten \\
+\item[$sg^{elm}_s$] $\in \{0, 1\} ~ \forall s \in \left[1, S\right]$ Student $s$ studiert ELM \\
+\item[$sg^{mbm}_s$] $\in \{0, 1\} ~ \forall s \in \left[1, S\right]$ Student $s$ studiert MBM \\
+\item[$sg^{wim}_s$] $\in \{0, 1\} ~ \forall s \in \left[1, S\right]$ Student $s$ studiert WIM \\
+\item[$c^{1}_{s,p}$] $\in \{0, 1\} ~ \forall s,p \in \left[1, S\right] \times \left[1, P\right]$ Erste Wahl von Student $s$ ist Projekt $p$ \\
+\item[$c^{2}_{s,p}$] $\in \{0, 1\} ~ \forall s,p \in \left[1, S\right] \times \left[1, P\right]$ Erste Wahl von Student $s$ ist Projekt $p$ \\
+\item[$c^{3}_{s,p}$] $\in \{0, 1\} ~ \forall s,p \in \left[1, S\right] \times \left[1, P\right]$ Erste Wahl von Student $s$ ist Projekt $p$ \\
+\end{description}
+\end{frame}
+
+\begin{frame}{Entscheidungsvariablen}
+$alloc^{s}_p$ $\in \{0, 1\} ~ \forall s,p \in \left[1, S\right] \times \left[1, P\right]$ 
+\newline
+\newline
+Student $s$ wird Projekt $p$ zugeordnet
+
+\end{frame}
+
+\begin{frame}{Nebenbedingungen I}
+Jeder Student muss genau einem Projekt zugeordnet werden:
+\[ \sum_{p=1}^P alloc^{s}_p = 1 ~~\forall s \in \left[1, S\right]\]
+
+Projekte werden nicht überbucht:
+\[ \sum_{s=1}^S alloc^{s}_p \leq c_p ~~\forall p \in \left[1, P\right]\]
+\end{frame}
+
+\begin{frame}{Nebenbedingungen II}
+Mindestanzahl von ELM Studierenden pro Projekt:
+\[ \sum_{s=1}^S alloc^{s}_p \cdot sg^{ELM}_s \geq req^{ELM}_p ~~\forall p \in \left[1, P\right]\]
+
+Mindestanzahl von MBM Studierenden pro Projekt:
+\[ \sum_{s=1}^S alloc^{s}_p \cdot sg^{MBM}_s \geq req^{MBM}_p ~~\forall p \in \left[1, P\right]\]
+
+Mindestanzahl von WIM Studierenden pro Projekt:
+\[ \sum_{s=1}^S alloc^{s}_p \cdot sg^{WIM}_s \geq req^{WIM}_p ~~\forall p \in \left[1, P\right]\]
+\end{frame}
+
+\begin{frame}{Zielfunktion}
+
+\[ 
+min \sum_{s=1}^S \sum_{p=1}^P alloc^{s}_p \cdot penalty_{s,p} \]
+
+wobei:
+
+$penalty_{s,p} = 
+\begin{cases}
+1 		& \text{wenn}~ c^1_{s,p} = 1 \\
+100 		& \text{wenn}~ c^2_{s,p} = 1 \\
+10000 	& \text{wenn}~ c^3_{s,p} = 1 \\
+1000000 	& \text{sonst}
+\end{cases}$
+
+\end{frame}
+
+
+\end{document}
