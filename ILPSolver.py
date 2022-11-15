@@ -6,7 +6,7 @@ import sys
 class ILPSolver(Solver):
     def solve(self):
         projects, maxParticipants,  minELM, minMBM, minWIM = gp.multidict(self.projects)
-        students, discipline, choiceA, choiceB, choiceC = gp.multidict(self.students)
+        students, discipline, choiceA, choiceB, choiceC, _, _ = gp.multidict(self.students)
 
         model = gp.Model("mapping")
 

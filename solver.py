@@ -8,8 +8,8 @@ class Solver:
         self.projects = {}
         self.allocation = {}
 
-    def addStudent(self, studentName, discipline, choiceA, choiceB, choiceC):
-        self.students[studentName] = [discipline, choiceA, choiceB, choiceC]
+    def addStudent(self, matNr, discipline, choiceA, choiceB, choiceC, lastname, name ):
+        self.students[matNr] = [discipline, choiceA, choiceB, choiceC, lastname, name]
 
     def addProject(self, projectName, maxParticipants,  minELM, minMBM, minWIM):
         self.projects[projectName] = [maxParticipants,  minELM, minMBM, minWIM]
