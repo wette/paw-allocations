@@ -4,7 +4,19 @@ from gurobipy import GRB
 import sys
 
 class ILPSolver(Solver):
+    def check_for_correct_input(self):
+        #check if all students voted for unique projects
+        students, _, choiceA, choiceB, choiceC, _, _ = gp.multidict(self.students)
+        for s in students:
+            if choiceA[s] == choiceB[s] or \
+               choiceA[s] == choiceC[s] or \
+               choiceB[s] == choiceC[s]:
+                raise Exception(f"Student {s} did NOT select 3 distinct PAWs!")
+
+
     def solve(self):
+        self.check_for_correct_input()
+        
         projects, maxParticipants,  minELM, minMBM, minWIM = gp.multidict(self.projects)
         students, discipline, choiceA, choiceB, choiceC, _, _ = gp.multidict(self.students)
 
@@ -23,7 +35,7 @@ class ILPSolver(Solver):
             choiceWeights[s] = dict()
             choiceWeights[s][choiceA[s]] = 1
             choiceWeights[s][choiceB[s]] = 100
-            choiceWeights[s][choiceC[s]] = 10000
+            choiceWeights[s][choiceC[s]] = 1000
 
             for p in self.projects.keys():
                 if p not in choiceWeights[s].keys():
