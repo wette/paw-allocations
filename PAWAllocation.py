@@ -13,7 +13,7 @@ import sys
 solver = ILPSolver()
 #solver = MontecarloSolver()
 
-inputFile = "/Users/wette/Documents/FHBielefeld/tools/pawZuordnung/1667482745__complete_2022-11-03_14-39.xlsx"
+inputFile = "/Users/wette/Documents/FHBielefeld/tools/pawZuordnung/1707129638__Wahlverfahren PAW_2024-02-05_11-40.xlsx"
 
 ilias = IliasInterface()
 ilias.readProjects(inputFile, "Projekte")
@@ -68,6 +68,89 @@ print(f"Rate of fulfilled 2nd choice: {numRealized[1]/len(students)*100.0}")
 print(f"Rate of fulfilled 3rd choice: {numRealized[2]/len(students)*100.0}")
 print(f"Rate of fulfilled 4th choice: {numRealized[3]/len(students)*100.0}")
 
+
+#plot first choices, disciplies over projects
+mix = dict()
+for p in allocation:
+    mix[p] = {Solver.ELM : 0, Solver.MBM: 0, Solver.WIM: 0}
+for s in students:
+    mix[ students[s][1]  ][students[s][0]] += 1
+
+elms = []
+mbms = []
+wims = []
+for p in mix:
+    elms.append(mix[p][Solver.ELM])
+    mbms.append(mix[p][Solver.MBM])
+    wims.append(mix[p][Solver.WIM])
+
+fig, ax = plt.subplots()
+shortNames = [name[0:5] for name in allocation.keys()]
+ax.bar(shortNames, elms, 0.35, label='ELM')
+ax.bar(shortNames, mbms, 0.35, label='MBM', bottom=elms)
+ax.bar(shortNames, wims, 0.35, label='WIM', bottom=[sum(x) for x in zip(mbms, elms)])
+
+ax.set_ylabel('Participants')
+ax.set_title('First Choices by Disciplines')
+ax.legend()
+
+plt.savefig("first_choices.png")
+
+#plot second choices, disciplies over projects
+mix = dict()
+for p in allocation:
+    mix[p] = {Solver.ELM : 0, Solver.MBM: 0, Solver.WIM: 0}
+for s in students:
+    mix[ students[s][2]  ][students[s][0]] += 1
+
+elms = []
+mbms = []
+wims = []
+for p in mix:
+    elms.append(mix[p][Solver.ELM])
+    mbms.append(mix[p][Solver.MBM])
+    wims.append(mix[p][Solver.WIM])
+
+fig, ax = plt.subplots()
+shortNames = [name[0:5] for name in allocation.keys()]
+ax.bar(shortNames, elms, 0.35, label='ELM')
+ax.bar(shortNames, mbms, 0.35, label='MBM', bottom=elms)
+ax.bar(shortNames, wims, 0.35, label='WIM', bottom=[sum(x) for x in zip(mbms, elms)])
+
+ax.set_ylabel('Participants')
+ax.set_title('Second Choices by Disciplines')
+ax.legend()
+
+plt.savefig("second_choices.png")
+
+#plot second choices, disciplies over projects
+mix = dict()
+for p in allocation:
+    mix[p] = {Solver.ELM : 0, Solver.MBM: 0, Solver.WIM: 0}
+for s in students:
+    mix[ students[s][3]  ][students[s][0]] += 1
+
+elms = []
+mbms = []
+wims = []
+for p in mix:
+    elms.append(mix[p][Solver.ELM])
+    mbms.append(mix[p][Solver.MBM])
+    wims.append(mix[p][Solver.WIM])
+
+fig, ax = plt.subplots()
+shortNames = [name[0:5] for name in allocation.keys()]
+ax.bar(shortNames, elms, 0.35, label='ELM')
+ax.bar(shortNames, mbms, 0.35, label='MBM', bottom=elms)
+ax.bar(shortNames, wims, 0.35, label='WIM', bottom=[sum(x) for x in zip(mbms, elms)])
+
+ax.set_ylabel('Participants')
+ax.set_title('Third Choices by Disciplines')
+ax.legend()
+
+plt.savefig("third_choices.png")
+
+#plot granted choices
 fig, ax = plt.subplots()
 ax.bar("1st Choices", numRealized[0]/len(students)*100.0, 0.35)
 ax.bar("2nd Choices", numRealized[1]/len(students)*100.0, 0.35)
@@ -77,7 +160,8 @@ ax.bar("No Choices",  numRealized[3]/len(students)*100.0, 0.35)
 ax.set_ylabel('Percent of Participants')
 ax.set_title('Granted Choices')
 
-plt.show()
+plt.savefig("granted_choices.png")
+
 
 
 #mixing of student's diciplines in projects:
@@ -107,4 +191,4 @@ ax.set_ylabel('Participants')
 ax.set_title('Project Allocations by Disciplines')
 ax.legend()
 
-plt.show()
+plt.savefig("project_allocations.png")
