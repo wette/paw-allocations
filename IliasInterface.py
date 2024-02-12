@@ -1,4 +1,5 @@
 import pandas as pd
+import random
 
 
 class IliasInterface:
@@ -17,6 +18,9 @@ class IliasInterface:
             choice3 = df.iat[i, 6].strip()
 
             self.students.append([matNr, studiengang, choice1, choice2, choice3, name, vorname])
+        
+        #randomize order of students such that initial order has no influence on the solution
+        random.shuffle(self.students)
 
     def readProjects(self, filename, sheet):
         df = pd.read_excel(io=filename, sheet_name=sheet)
